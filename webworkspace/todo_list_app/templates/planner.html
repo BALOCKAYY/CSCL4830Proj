@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <!-- Use the common base styles -->
+  <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+  <style>
+    /* Additional styles for forms and tables */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    form button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #0056b3;
+    }
+    .todo-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .todo-table th,
+    .todo-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    .todo-table th {
+      background-color: #f2f2f2;
+    }
+    .todo-table tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    .todo-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    .todo-table a {
+      margin-right: 10px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .todo-table a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'index' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'planner' %}">Planner</a>
+    </nav>
+  </header>
+  <main>
+    <section class="todo-section">
+      <h1>To-Do List</h1>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="{{ form.todo.id_for_label }}">Todo:</label>
+          {{ form.todo }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.due.id_for_label }}">Due:</label>
+          {{ form.due }}
+          {% if form.due.errors %}
+            <div class="error-message">
+              {% for error in form.due.errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <button type="submit">Save</button>
+      </form>
+      <table class="todo-table">
+        <thead>
+          <tr>
+            <th>To-Do</th>
+            <th>Due</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for todo in todolist %}
+            <tr>
+              <td>{{ todo.todo }}</td>
+              <td>{{ todo.due }}</td>
+              <td>
+                <a href="{% url 'edit_todo' todo.id %}">Edit</a>
+                <a href="{% url 'delete_todo' todo.id %}">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+

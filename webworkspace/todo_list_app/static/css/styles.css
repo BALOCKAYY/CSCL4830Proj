@@ -1,0 +1,99 @@
+/* styles.css */
+
+/* Global body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Header navigation styles */
+header nav {
+  background-color: #333;
+  padding: 10px;
+  text-align: center;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+header nav a:hover,
+header nav a.active {
+  text-decoration: underline;
+}
+
+/* Main content styling */
+main {
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* To-Do Section styling */
+.todo-section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+form button {
+  padding: 10px 15px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #555;
+}
+
+/* Table styling */
+.todo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.todo-table th,
+.todo-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.todo-table th {
+  background-color: #f2f2f2;
+}
+
+.todo-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.todo-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Action links styling */
+.todo-table a {
+  margin-right: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.todo-table a:hover {
+  text-decoration: underline;
+}
+

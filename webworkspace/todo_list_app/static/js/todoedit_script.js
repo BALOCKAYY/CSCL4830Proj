@@ -48,8 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // ✅ Function to get CSRF token for secure requests
     function getCSRFToken() {
-        let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
-        return csrfToken ? csrfToken.value : null;
+        return document.querySelector("[name=csrfmiddlewaretoken]").value;
     }
 
     // ✅ Handle Delete Functionality (AJAX)
@@ -62,13 +61,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             const todoId = link.getAttribute("data-todo-id");
-
             fetch(link.href, {
-                method: "POST",  // ✅ Ensures POST request instead of GET
+                method: "POST",
                 headers: {
                     "X-CSRFToken": getCSRFToken(),
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Content-Type": "application/json"
+                    "X-Requested-With": "XMLHttpRequest"
                 }
             })
             .then(response => response.json())

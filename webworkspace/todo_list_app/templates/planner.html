@@ -5,10 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-Do List</title>
-  <!-- Use the common base styles -->
   <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
   <style>
-    /* Additional styles for forms and tables */
+    /* Form styling */
     .form-group {
       margin-bottom: 15px;
     }
@@ -37,8 +36,7 @@
       border-collapse: collapse;
       margin-top: 20px;
     }
-    .todo-table th,
-    .todo-table td {
+    .todo-table th, .todo-table td {
       border: 1px solid #ddd;
       padding: 10px;
       text-align: left;
@@ -60,6 +58,10 @@
     .todo-table a:hover {
       text-decoration: underline;
     }
+    header nav {
+      display: flex;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -68,30 +70,41 @@
       <a href="{% url 'index' %}">Home</a>
       <a href="{% url 'about' %}">About</a>
       <a href="{% url 'planner' %}">Planner</a>
+      <a href="{% url 'search_todo' %}">Search</a>
     </nav>
   </header>
   <main>
     <section class="todo-section">
       <h1>To-Do List</h1>
+      <!-- Form for Adding New To-Do -->
       <form method="POST">
         {% csrf_token %}
         <div class="form-group">
-          <label for="{{ form.todo.id_for_label }}">Todo:</label>
+          <label for="{{ form.todo.id_for_label }}">To-Do:</label>
           {{ form.todo }}
         </div>
         <div class="form-group">
           <label for="{{ form.due.id_for_label }}">Due:</label>
           {{ form.due }}
-          {% if form.due.errors %}
-            <div class="error-message">
-              {% for error in form.due.errors %}
-                <p>{{ error }}</p>
+        </div>
+
+        <!-- Error Message Container -->
+        <div id="error-container">
+          {% if form.errors %}
+            <div class="error-message" id="error-message">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
               {% endfor %}
             </div>
           {% endif %}
         </div>
+
         <button type="submit">Save</button>
       </form>
+
+      <!-- Display Existing To-Do List -->
       <table class="todo-table">
         <thead>
           <tr>
@@ -107,8 +120,12 @@
               <td>{{ todo.due }}</td>
               <td>
                 <a href="{% url 'edit_todo' todo.id %}">Edit</a>
-                <a href="{% url 'delete_todo' todo.id %}">Delete</a>
+		<a href="{% url 'delete_todo' todo.id %}" class="btn-delete" data-todo-id="{{ todo.id }}">Delete</a>
               </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3">No To-Do entries found.</td>
             </tr>
           {% endfor %}
         </tbody>

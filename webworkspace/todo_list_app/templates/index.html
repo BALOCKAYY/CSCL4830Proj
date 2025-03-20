@@ -14,5 +14,97 @@
 <p>
   Start exploring and experience a more productive, organized, and fulfilling day!
 </p>
+<style>
+    .search-form {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .search-form input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+    .search-form button {
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .search-form button:hover {
+      background-color: #0056b3;
+    }
+    .error-message {
+      color: red;
+      margin-top: 5px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+</style>
+<main>
+    <section>
+      <h1>Search for To-Do's</h1>
+      <form class="search-form" method="GET" action="{% url 'search_todo' %}">
+        <label for="search_due">Search by Due Date (MM/DD/YYYY):</label>
+        <input type="text" id="search_due" name="due" placeholder="MM/DD/YYYY" required>
+        <button type="submit">Search</button>
+      </form>
+      <div id="error-container">
+        {% if search_error %}
+	  <div class="error-message" id="error-message"> {{ search_error }}</div>
+        {% endif %}
+      </div>
+    </section>
+    {% if upcoming_todos %}
+    <section class="upcoming-todos">
+      <h2>Upcoming To-Do's</h2>
+      <ul>
+        {% for todo in upcoming_todos %}
+          <li>
+            <strong>{{ todo.todo }}</strong> - Due: {{ todo.due }}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+</main>
+
+<script>
+    // Remove error message when user starts typing in search bar
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("Page Loaded - JavaScript Running ✅");  // Debugging
+
+        const searchInput = document.getElementById("search_due");
+        if (searchInput) {
+            console.log("Search input detected ✅");
+
+            searchInput.addEventListener("input", function() {
+                console.log("User is typing... ✅");  // Debugging
+                const errorMessage = document.getElementById("error-message"); // Get error message again
+                if (errorMessage) {
+                    console.log("Removing error message! ✅");  // Debugging
+                    errorMessage.remove();
+			} else {
+					console.log("No error message found.")
+				}
+            });
+
+            searchInput.addEventListener("focus", function() {
+                console.log("Input field focused... ✅");  // Debugging
+                const errorMessage = document.getElementById("error-message");
+                if (errorMessage) {
+                    console.log("Removing error message on focus! ✅");  // Debugging
+                    errorMessage.remove();
+			} else {
+					console.log("No error message found.")
+				}
+            });
+        } else {
+            console.log("Error: Search input not found ❌");  // Debugging
+        }
+    });
+</script>
 {% endblock %}
 

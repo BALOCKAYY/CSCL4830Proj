@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit To-Do List</title>
-  <!-- Use the common base styles -->
   <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
   <style>
     /* Additional styles for form groups and error messages */
@@ -37,8 +36,7 @@
       border-collapse: collapse;
       margin-top: 20px;
     }
-    .todo-table th,
-    .todo-table td {
+    .todo-table th, .todo-table td {
       border: 1px solid #ddd;
       padding: 10px;
       text-align: left;
@@ -60,17 +58,47 @@
     .todo-table a:hover {
       text-decoration: underline;
     }
-    /* Center the back button in the header */
+
     header nav {
       display: flex;
       justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    header nav a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+    header nav a:hover {
+      text-decoration: underline;
+    }
+    /* Center the back button */
+    .back-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .btn-back {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .btn-back:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
   <header>
     <nav>
-      <a href="{% url 'planner' %}">Back</a>
+    	<a href="{% url 'index' %}">Home</a>
+    	<a href="{% url 'about' %}">About</a>
+    	<a href="{% url 'planner' %}">Planner</a>
+	<a href"{% url 'search_todo' %}">Search</a>
     </nav>
   </header>
   <main>
@@ -79,22 +107,27 @@
       <form method="POST">
         {% csrf_token %}
         <div class="form-group">
-          <label for="{{ form.todo.id_for_label }}">Todo:</label>
+          <label for="{{ form.todo.id_for_label }}">To-Do:</label>
           {{ form.todo }}
+	   {% if form.todo.errors %}
+             {% for error in form.todo.errors %}
+               <p class="error-message">{{ error }}</p>
+             {% endfor %}
+           {% endif %}
         </div>
         <div class="form-group">
           <label for="{{ form.due.id_for_label }}">Due:</label>
           {{ form.due }}
-          {% if form.due.errors %}
-            <div class="error-message">
-              {% for error in form.due.errors %}
-                <p>{{ error }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
+	   {% if form.due.errors %}
+             {% for error in form.due.errors %}
+               <p class="error-message">{{ error }}</p>
+             {% endfor %}
+           {% endif %}
         </div>
         <button type="submit">Update</button>
       </form>
+
+      <!-- Display Other To-Do List Entries -->
       <table class="todo-table">
         <thead>
           <tr>
@@ -111,7 +144,7 @@
                 <td>{{ todo.due }}</td>
                 <td>
                   <a href="{% url 'edit_todo' todo.pk %}">Edit</a>
-                  <a href="{% url 'delete_todo' todo.pk %}">Delete</a>
+		  <a href="{% url 'delete_todo' todo.pk %}" class="btn-delete" data-todo-id="{{ todo.pk }}">Delete</a>
                 </td>
               </tr>
             {% endif %}
@@ -123,8 +156,11 @@
         </tbody>
       </table>
     </section>
+    <div class="back-container">
+      <a href="{% url 'planner' %}" class="btn-back">Back to Planner</a>
+    </div>
   </main>
-  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/todoedit_script.js' %}"></script>
 </body>
 </html>
 

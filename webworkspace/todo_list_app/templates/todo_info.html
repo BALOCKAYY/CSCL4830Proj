@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do Information</title>
+  <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+  <style>
+    /* Center the navigation */
+    header nav {
+      display: flex;
+      justify-content: center;
+    }
+    .search-form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-form input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+    .search-form button {
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .search-form button:hover {
+      background-color: #0056b3;
+    }
+    .error-message {
+      color: red;
+      font-size: 1em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      max-width: 600px;
+      margin: auto;
+    }
+    .todo-item {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .todo-actions a {
+      margin-left: 10px;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+    .btn-edit {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+    .btn-back {
+      display: block;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'index' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'planner' %}">Planner</a>
+      <a href="{% url 'search_todo' %}">Search</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>To-Do Information</h1>
+
+    <!-- Search Bar for Date Lookup -->
+    <form class="search-form" method="GET" action="{% url 'search_todo' %}">
+      <label for="search_due">Search by Due Date (MM/DD/YYYY):</label>
+      <input type="text" id="search_due" name="due" placeholder="MM/DD/YYYY" required>
+      <button type="submit">Search</button>
+    </form>
+
+    {% if search_error %}
+      <p class="error-message">{{ search_error }}</p>
+    {% else %}
+      <p>Showing all To-Do items for <strong>{{ due_date }}</strong>:</p>
+
+      <ul class="todo-list">
+        {% for todo in todos %}
+          <li class="todo-item">
+            <div>
+              <p><strong>To-Do:</strong> {{ todo.todo }}</p>
+              <p><strong>Due Date:</strong> {{ todo.due }}</p>
+            </div>
+            <div class="todo-actions">
+              <a href="{% url 'edit_todo' todo.id %}" class="btn-edit">Edit</a>
+	      <a href="{% url 'delete_todo' todo.id %}" class="btn-delete" data-todo-id="{{ todo.id }}">Delete</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="back-container">
+      <a href="{% url 'index' %}" class="btn-back">Back</a>
+    </div>
+  </main>
+
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+

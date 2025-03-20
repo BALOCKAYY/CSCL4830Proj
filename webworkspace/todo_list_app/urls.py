@@ -12,4 +12,5 @@ urlpatterns = [
             views.edit_todo, name='edit_todo'),
         path('todo/planner/delete/<int:todo_id>/',
             views.delete_todo, name='delete_todo'),
+        path('todo/search/', views.search_todo, name="search_todo"),
         ]
